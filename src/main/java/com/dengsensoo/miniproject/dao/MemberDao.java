@@ -1,5 +1,5 @@
 package com.dengsensoo.miniproject.dao;
 
-public class MemberDao {
+public interface MemberDao {
 
 }
