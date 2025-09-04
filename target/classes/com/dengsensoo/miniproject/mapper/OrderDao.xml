@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.dengsensoo.miniproject.dao.OrderDao">  
+  
+    <!-- 모든 주문 리스트 가져오기 -->
+	<select id="OrderDao" resultType="com.dengsensoo.miniproject.dto.OrderDto">
+		SELECT * FROM ordertbl
+	</select>
+	
+	<!-- 모든 회원 리스트 가져오기 -->
+	<select id="MemberListDao" resultType="com.dengsensoo.miniproject.dto.MemberDto">
+		SELECT * FROM membertbl
+	</select>
+	
+	<!-- member:order 1:N관계 매핑 -->
+	<resultMap type="com.dengsensoo.miniproject.dto.MemberDto" id="memberWithOrder">
+		<id property="memberid" column="memberid" /> <!-- member 테이블의 기본키 셋팅 -->
+		<result property="membername"  column="membername" /> <!-- member 테이블의 나머지 필드 셋팅 -->
+		
+		<!-- order List 매핑 -->
+		<collection property="orderDtos" ofType="com.dengsensoo.miniproject.dto.OrderDto">
+			<id property="orderid" column="orderid" /> <!-- order 테이블의 기본키 셋팅 -->
+			<result property="ordername" column="ordername" /> <!-- order 테이블의 나머지 필드 셋팅 -->
+			<result property="memberid" column="memberid" /> <!-- order 테이블의 나머지 필드 셋팅 -->
+		</collection>
+	</resultMap>
+	
+	<select id="memberOrderListDao" resultMap="memberWithOrder">
+					
+		SELECT m.memberid, m.membername, o.orderid, o.ordername
+			FROM membertbl m
+				INNER JOIN membertbl m ON o.memberid = m.memberid	
+				   WHERE m.memberid = #{param1}
+	</select>
+	
+	<select id="AllMemberOrderLitsDao" resultMap="memberWithOrder">
+		SELECT m.memberid, m.membername, o.orderid, o.ordername
+			FROM membertbl m
+				INNER JOIN membertbl m o ON m.memberid = o.memberid							
+	</select>
+	
+</mapper>

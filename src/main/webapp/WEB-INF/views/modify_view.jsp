@@ -4,16 +4,17 @@
 <html>
 <head>
   <title>글 수정</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="resources/css/style.css">
 </head>
 <body>
   <%@ include file="include/header.jsp" %>
 
   <main class="container">
     <h2>게시판 글 수정</h2>
-    <form method="post" action="board_edit_process.jsp">
-      <input type="text" name="title" value="첫 번째 글" required>
-      <textarea name="content" rows="8" required>이곳은 글 내용이 표시되는 부분입니다.</textarea>
+    <form method="post" action="boardmodify">
+      <input type="text" name="btitle" value="${boardDto.btitle }" placeholder="제목" required>
+      <textarea name="bcontent" rows="8" placeholder="내용을 입력하세요" required>${boardDto.bcontent }</textarea>
+      <input type="hidden" name="bnum" value="${boardDto.bnum }"> <!-- bnum 값을 Controller에서 getParameter로 받기 위해 존재 -->
       <button type="submit">수정 완료</button>
     </form>
   </main>

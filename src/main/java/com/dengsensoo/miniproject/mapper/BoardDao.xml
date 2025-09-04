@@ -4,5 +4,75 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
     
 <mapper namespace="com.dengsensoo.miniproject.dao.BoardDao">
+
+		<!-- board:member 1:1 관계 매핑 board:comment 1:N 관계 매핑 -->
+	<resultMap type="com.dengsensoo.miniproject.dto.BoardDto" id="boardWithMember">
+		<id property="bnum" column="bnum" /> <!-- boardtbl 테이블의 기본키 셋팅 -->
+		<result property="btitle"  column="btitle" /> <!-- boardtbl 테이블의 나머지 필드 셋팅 -->
+		<result property="bcontent"  column="bcontent" />
+		<result property="bwriter"  column="bwriter" />
+		<result property="bhit"  column="bhit" />
+		<result property="bdate"  column="bdate" />
+		<result property="rnum"  column="rnum" />
+		<result property="commentcount"  column="commentcount" />
+		
+		<!-- boardDto:memberDto 1:1 관계 매핑 -->
+		<association property="memberDto" javaType="com.dengsensoo.miniproject.dto.MemberDto">
+			<id property="memberid" column="memberid" />
+			<result property="membernum" column="membernum" />
+			<result property="memberpw" column="memberpw" />
+			<result property="membername" column="membername" />
+			<result property="memberdate" column="memberdate" />
+		</association>
+	</resultMap>
+	
+	<!-- 모든 글 가져오기(멤버 정보 조인) -->
+	<select id="pageBoardListDao" resultMap="boardWithMember">
+		<![CDATA[
+		select *
+    			from (
+            		select ROWNUM as rnum, r.*
+                		from
+                    		(SELECT b.bnum, b.btitle, b.bcontent, b.bwriter, m.membername, b.bhit, b.bdate
+                        		FROM boardtbl b
+                            		INNER JOIN membertbl m ON b.bwriter = m.memberid	
+                                		ORDER BY b.bnum DESC) r where rownum <= #{param2})
+                                    		where rnum >= #{param1}
+		]]>                                    		
+	</select>
+	
+	<!-- 모든 글 갯수 가져오기 -->
+	<select id="AllBoardCountDao" resultType="int">	
+		SELECT COUNT(*) FROM boardtbl
+	</select>
+	
+	<!-- 게시판 글 삽입하기 -->
+	<insert id="boardWriteDao">
+		INSERT INTO boardtbl(bnum, btitle, bcontent, bwriter, bhit)
+			VALUES(board_seq.nextval, #{param1}, #{param2}, #{param3}, 0)
+	</insert>
+	
+	<!-- 글 번호로 게시판 글 레코드 가져오기 : 글쓴이 이름으로 출력 -->	
+	<select id="contentViewDao" resultMap="boardWithMember">
+		SELECT b.bnum, b.btitle, b.bcontent, b.bwriter, m.membername, b.bhit, b.bdate
+			FROM boardtbl b
+				INNER JOIN membertbl m ON b.bwriter = m.memberid	
+				   WHERE b.bnum = #{param1}				
+	</select>
+	
+	<!-- 글 번호로 조회 수 증가 -->
+	<update id="updateHitDao">
+		UPDATE boardtbl SET bhit=bhit+1 WHERE bnum=#{param1}
+	</update>
+	
+	<!-- 글 번호로 해당 글 수정하기 -->
+	<update id="boardModifyDao">
+		UPDATE boardtbl SET btitle=#{param2}, bcontent=#{param3} WHERE bnum=#{param1}
+	</update>
+	
+	<!-- 게시판 글 삭제하기 -->
+	<delete id="boardDeleteDao">
+		DELETE FROM boardtbl WHERE bnum=#{param1}
+	</delete>
 	
 </mapper>

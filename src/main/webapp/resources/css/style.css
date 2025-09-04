@@ -16,6 +16,10 @@ header {
   align-items: center;
 }
 
+h2 {
+	text-align: center;
+}
+
 header h1 { font-size: 20px; }
 nav a { color: #fff; margin-left: 15px; text-decoration: none; }
 nav a:hover { text-decoration: underline; }
@@ -36,6 +40,7 @@ footer {
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  text-align: center;
 }
 
 button {
@@ -67,3 +72,56 @@ input, textarea {
 }
 .table th { background: #f2f2f2; }
 .table tr:hover { background: #fafafa; }
+
+.paging-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 18px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.pagination {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.pagination a {
+  display: inline-block;
+  margin: 0 4px;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  color: #333;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.pagination a:hover {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.pagination .active {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+  font-weight: bold;
+  pointer-events: none;
+}
+
+/* 상품 섹션 */
+.product-section { padding: 40px; background: #fff; }
+.products { display: flex; gap: 20px; }
+.product {
+  background: #fafafa;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  text-align: center;
+  padding: 15px;
+}
+.product img { width: 100%; border-radius: 6px; }
+.product h3 { margin: 10px 0 5px; }
+.product .price { font-weight: bold; color: #0078d7; }
